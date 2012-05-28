@@ -2,15 +2,604 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
 
   <title><![CDATA[My Octopress Blog]]></title>
-  <link href="http://madhukarah.github.com/b/atom.xml" rel="self"/>
-  <link href="http://madhukarah.github.com/b/"/>
-  <updated>2012-05-28T16:06:55+05:30</updated>
-  <id>http://madhukarah.github.com/b/</id>
+  <link href="http://madhukarah.github.com/atom.xml" rel="self"/>
+  <link href="http://madhukarah.github.com/"/>
+  <updated>2012-05-28T16:58:53+05:30</updated>
+  <id>http://madhukarah.github.com/</id>
   <author>
     <name><![CDATA[Your Name]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Hello Github]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/05/28/hello-github/"/>
+    <updated>2012-05-28T16:44:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/05/28/hello-github</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Your first node.js module]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/05/27/your-first-node-dot-js-module/"/>
+    <updated>2012-05-27T21:27:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/05/27/your-first-node-dot-js-module</id>
+    <content type="html"><![CDATA[<p>Making modular and reusable code is something we should all be doing to keep the
+quality of it up to par. A very simple way to make reusable <em>modules</em> of code in
+<a href="http://nodejs.org/">node.js</a> is to create generalized modules (no pun
+intended).</p>
+
+<p>Recently, I created a <a href="http://search.npmjs.org/#/Domai.nr">node module</a> for
+<a href="http://domai.nr">Domai.nr</a>, and wanted to shed some light on how easy it
+actually is to make these node modules. In this post, we&#8217;re going to recreate
+the domai.nr module from scratch, and hopefully you learn a few things along the
+way!</p>
+
+<h3>What is a Node Module?</h3>
+
+<p>A <a href="https://github.com/joyent/node/wiki/modules">node module</a> is JavaScript code
+that usually does a few specific things, and is usually agnostic to the rest of
+your application. It typically promotes better code quality, and is super
+awesome because you can publish your modules to <a href="http://npmjs.org/">npm</a> so
+others can use them, too. If you&#8217;re not familiar with npm, check out <a href="http://howtonode.org/introduction-to-npm">this
+article</a> for a simple introduction.</p>
+
+<p>Some of the <a href="http://search.npmjs.org/">most popular</a> node modules are:</p>
+
+<ul>
+<li><a href="http://search.npmjs.org/#/underscore">underscore.js</a></li>
+<li><a href="http://search.npmjs.org/#/coffee-script">coffee script</a></li>
+<li><a href="http://search.npmjs.org/#/express">express</a></li>
+<li><a href="http://search.npmjs.org/#/jade">jade</a></li>
+<li><a href="http://search.npmjs.org/#/socket.io">socket.io</a></li>
+</ul>
+
+
+<h3>Why a Domai.nr node module?</h3>
+
+<p>I&#8217;ve chosen the Domai.nr API over others for several reasons. Mostly, becuause
+it has two methods that both return JSON: <a href="http://domai.nr/api/docs/json#search-api">search</a> and <a href="http://domai.nr/api/docs/json#info-api">info</a>. It&#8217;s very easy to write a wrapper for these two methods. Also, I &lt;3 Domai.nr a ton, and you should too. :D</p>
+
+<h3>Let&#8217;s get started!</h3>
+
+<p>As Isaac mentions <a href="http://howtonode.org/how-to-module">here</a>, there are
+different ways for you to write a module. Some people have specific preferences,
+and if you have any insight or feedback as to my process, I&#8217;d love to <a href="mailto:c@cnnr.me&amp;subject=How+I+Write+Node+Modules">hear from
+you</a>.</p>
+
+<h3>A package.json file</h3>
+
+<p>The package.json file is a description of the module, and also specifies where
+your code is located. Some common attributes in the file include:</p>
+
+<ul>
+<li>Name of the module</li>
+<li>Version</li>
+<li>Description of the module</li>
+<li>Dependencies of the module</li>
+<li>Git repo</li>
+<li>Keywords (for searching npm)</li>
+<li>Main (where the code is located, relative to the package.json file)</li>
+</ul>
+
+
+<p>As you can tell, there is actually quite a bit of important information in here.
+This particular package.json file won&#8217;t be too large.</p>
+
+<script src="https://gist.github.com/2817308.js"> </script>
+
+
+<p>That should be fairly self-explanatory, but one thing to note is the <strong>main</strong>
+attribute of this JSON object. I touched on it briefly a bit earlier on in the
+post, but essentially, it&#8217;s a path to the code that makes up your module.</p>
+
+<h3>Getting ready</h3>
+
+<p>Awesome - now we just have one more quick step before digging into the code.
+Remember earlier when I mentioned we can publish our packages to npm and let
+others use them? This is one of my favorite things about creating node modules -
+we can use great code that has already been written for us. In our
+<code>package.json</code> file, we actually specified a dependency: a great HTTP abstraction called <a href="https://github.com/mikeal/request">request</a>.</p>
+
+<h3>Coding it up</h3>
+
+<p>As you saw in the package.json file above, we have a file at <code>/lib/domainr</code>
+where our code is kept. It&#8217;s actually at <code>/lib/domainr.js</code> (we omit the <code>.js</code> at
+the end). Let&#8217;s make the folder that goes with it, and the file:</p>
+
+<pre><code>mkdir lib &amp;&amp; touch lib/domainr.js
+</code></pre>
+
+<p>Alright - now pop open your favorite text editor, and let&#8217;s get this coded.</p>
+
+<p>If you&#8217;re familiar with Node.js, this should be pretty trivial (it is very easy
+to make these, after all). I&#8217;ll try and walk us through it, so anyone reading
+should hopefully understand. If you have any questions, feel free to reach out
+on <a href="http://twitter.com/connor">twitter</a> or <a href="mailto:c@cnnr.me">email</a>.</p>
+
+<p>The first thing we need to do in our <code>domainr.js</code> file is to require <a href="https://github.com/mikeal/request">request</a>. To do so, add the following at the top of the file:</p>
+
+<pre><code>var request = require('request')
+</code></pre>
+
+<br>This allows us to utilize all of the goodness that comes with request. That&#8217;s
+
+
+<p>perfect, since we&#8217;re just making HTTP requests to the domai.nr API.</p>
+
+<h4>An aside: how we want people to use the module</h4>
+
+<p>At this point, I&#8217;ve usually plotted out how I want my public API to be (i.e.
+what methods the users would be able to call using my module). I figured it
+would be best to just mirror domai.nr&#8217;s methods, so we&#8217;ll have two: <code>search</code> and
+<code>info</code>.</p>
+
+<p>So, it&#8217;s basically like this (<strong>NOTE</strong> do not add this as code, this is just an
+example for <em>how</em> it will be used):</p>
+
+<script src="https://gist.github.com/2817441.js"> </script>
+
+
+<p>You can find examples of what the responses will be like on <a href="http://domai.nr/api/docs/json">Domai.nr&#8217;s
+documentation</a>.</p>
+
+<h4>Back to coding&#8230;</h4>
+
+<p>That was a good exercise because now, we know exactly what we want to expose:
+<code>.search</code> and <code>.info</code>. Let&#8217;s to search first.</p>
+
+<p>To expose a method on the module object that is returned when <code>require</code>&#8216;ing it,
+you use <code>exports</code>. For example - we want people to call <code>.search</code> on the variable they aliased to the <code>require</code> (in the example above). In order to expose the method, we prefix it with <code>exports</code>. Here&#8217;s <a href="http://stackoverflow.com/questions/5311334/what-is-the-purpose-of-nodejs-module-exports-and-how-do-you-use-it#answer-5311377">more about that</a>, if you&#8217;re still a bit stuck.</p>
+
+<p>Let&#8217;s implement the search method now. Since we know about the <code>exports</code>, the
+signature of the function will look like this (with the <code>require</code> above it, just
+to make sure you&#8217;re following along:</p>
+
+<script src="https://gist.github.com/2817458.js"> </script>
+
+
+<p>As you see, we&#8217;re passing two arguments: a query to use for the search, and a
+callback function to use when the Domai.nr API has responded.</p>
+
+<p>This next part will utilize request. I recommend taking a look at <a href="https://github.com/mikeal/request#super-simple-to-use">this
+example</a> to be a little
+bit more familiar with how it works.</p>
+
+<p>Essentially, we make an HTTP request to a URL, and request gives us an <code>error</code>
+object, a <code>response</code> object, and a <code>body</code> object in response. We can then
+utilize those in our callback function.</p>
+
+<p>Let&#8217;s go ahead and implement that in our search function (add lines 5 - 7):</p>
+
+<script src="https://gist.github.com/2817490.js"> </script>
+
+
+<p>This is pretty simple - we make a request to the search endpoint of Domai.nr&#8217;s
+API, with the query parameter of what we&#8217;re searching. We then execute the
+callback function with the JSON that Domai.nr returns.</p>
+
+<p>This is looking pretty good, but let&#8217;s fix one thing up. You see where we&#8217;re
+appending <code>query</code> to the URL? Go ahead and wrap <code>query</code> in <code>encodeURI</code>, so we
+get something like:</p>
+
+<script src="https://gist.github.com/2817498.js"> </script>
+
+
+<p>This allows users to pass in phrases separated by spaces (i.e. &#8220;Connor Montgomery&#8221;), and have it query the API with both of them in mind (like the actual Domai.nr site does).</p>
+
+<p>So, right now you get a <a href="http://www.ihighfive.com/">high five</a>, becuase our
+<code>search</code> method is complete! In fact, you can even open up a terminal and check
+it out (in node&#8217;s <a href="http://en.wikipedia.org/wiki/Read%E2%80%93eval%E2%80%93print_loop">REPL</a>):</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+<span class='line-number'>2</span>
+<span class='line-number'>3</span>
+<span class='line-number'>4</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>$ cd TO/YOUR/DOMAINR/PROJECT/DIRECTORY
+</span><span class='line'>$ node
+</span><span class='line'>&gt; var domainr = require("./lib/domainr");
+</span><span class='line'>&gt; domainr.search("san francisco", function(resp) { console.log(resp) })</span></code></pre></td></tr></table></div></figure>
+
+
+<p>And after a few moments, you should see a JSON object from Domai.nr returned in
+your terminal. Awesomesauce!</p>
+
+<h4>The .info method</h4>
+
+<p>The info method is essentially the same thing, we just make it an <code>exports.info</code>
+(instead of <code>exports.search</code>, and change the URL in the <code>request</code> argument to
+<code>http://domai.nr/api/json/info?q=</code>. We don&#8217;t need to wrap the <code>query</code> in
+<em>encodeURI</em>, since developers will be passing in a domain name, and not a
+possibly-space-separated string.</p>
+
+<p>However, we ought to throw an error if they do happen to not pass in a domain.
+It&#8217;s actually very trivial to do so, since we can just see what the
+<code>statusCode</code> in the <code>response</code> object from request is. If it&#8217;s a 200 (i.e. an
+&#8220;OK&#8221;), all&#8217;s well. If it&#8217;s not, then we&#8217;ll throw an error. See the code below:</p>
+
+<script src="https://gist.github.com/2817530.js"> </script>
+
+
+<p>And that&#8217;s it, actually. Congrats!</p>
+
+<p>If you were to push this to npm now, you&#8217;d simply need to create a user (<code>npm
+adduser</code>). Next, you&#8217;d <code>cd</code> to the root of your project (where your
+<code>package.json</code> file is), and simply type <code>npm publish</code>. And then it&#8217;s live!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Move More Than 1 Unit with Square's Cubism.js]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/04/26/my-modification-to-squares-cubism-dot-js/"/>
+    <updated>2012-04-26T21:42:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/04/26/my-modification-to-squares-cubism-dot-js</id>
+    <content type="html"><![CDATA[<p>A few days ago, <a href="http://squareup.com">Square</a> released another open-source project: <a href="http://square.github.com/cubism/">cubism.js</a>. Cubism is a plugin for the fantastic <a href="http://mbostock.github.com/d3/">D3</a> library, allowing you to visualize data over a series of time.</p>
+
+<p>When cubism was released, I began using it and hacking on some examples. I found one feature I really wanted was missing: the ability to move multiple units at once across the graph via the keyboard. You can move 1 unit at a time by pressing &larr; or &rarr;, but I wanted to be able to quickly move from one side of the graph to another, without having to use the mouse.</p>
+
+<p>Before digging into this, it&#8217;s worth noting that the guy behind D3 and Cubism, <a href="http://bost.ocks.org/mike/">Mike Bostock</a>, and I have already <a href="https://github.com/square/cubism/pull/2">discussed getting this into cubism&#8217;s core</a>, but decided against it to keep the code base small and not force developers into doing something a specific way.</p>
+
+<h2>Adding this functionality</h2>
+
+<p>The first thing you&#8217;ll need to do is to clone the repo. To do so, simply run the following in the terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git clone https://github.com/square/cubism.git</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Now that we have the code, let&#8217;s move into that folder we just made by doing a <code>cd cubism</code> in the terminal.</p>
+
+<p>Before diving into this, though, we&#8217;ll need something to test our changes against. The easiest way to do this is to use the <code>gh-pages</code> branch of the cubism repo. This way, we can test our code with the example demo app Mike and Square have put together for us. To check this branch out, simply do the following in the terminal:</p>
+
+<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
+</pre></td><td class='code'><pre><code class=''><span class='line'>git checkout gh-pages</span></code></pre></td></tr></table></div></figure>
+
+
+<p>Great - now we have a demo app to see our progress with (to see the demo app, open <code>demo/index.html</code> in your favorite web browser). If you look at the source of <code>demo/index.html</code>, you&#8217;ll see it&#8217;s referencing <code>cubism.v1.js</code> in the parent directory. So, that&#8217;s what we&#8217;ll be modifying.</p>
+
+<h4>Modifying cubism.v1.js</h4>
+
+<p>Now, open up <code>cubism.v1.js</code> in your text editor. Since we&#8217;re looking to add this functionality when a user presses a key, I just searched for a <code>keydown</code> event. It turns it you can find it on approximately <strong>line 130</strong>, with this code: <code>d3.select(window).on("keydown.context-" + ++cubism_id, function() {...</code>.</p>
+
+<p>I won&#8217;t get too much into the code that surrounds the <code>switch</code> statement, but <code>.select()</code> and is part of <a href="http://mbostock.github.com/d3/">D3</a>, and we&#8217;re just waiting for a <code>keydown</code> event.</p>
+
+<p>Let&#8217;s get this working for the <code>left</code> key first, so we&#8217;ll adjust what is within the <code>case 37</code>. Right now, it is like this:</p>
+
+<script src="https://gist.github.com/2553756.js"> </script>
+
+
+<p>Basically, that&#8217;s saying if the user isn&#8217;t focusing on anything yet, bring the focus to the right-most unit on the graph (which is <code>size - 1</code>). If the focus is something that is greater than zero, then set the <code>context.focus</code> to be 1 less than the current focus - pretty simple stuff.</p>
+
+<p>The way I wanted cubism to work was, if I was holding down <code>shift</code> while using the arrow keys, the focus would move more than 1 unit (perhaps 20 units). To do that programmatically, we get something like this:</p>
+
+<script src="https://gist.github.com/2553760.js"> </script>
+
+
+<p>So this code tells cubism to move the focus by 20 if the following 2 are true statements:</p>
+
+<ol>
+<li>the <code>shift</code> key is pressed while the user is pressing &larr;</li>
+<li>the focus is greater than <code>20</code></li>
+</ol>
+
+
+<p>The second condition above is needed, because otherwise, the focus could move off the graph, and we definitely don&#8217;t want that! However, if the focus is less than 20, the execution flow will then cascade into the <code>else</code> clause, and the focus will subtract itself by 1, like it would if <code>shift</code> wasn&#8217;t pressed by the user.</p>
+
+<p>Now, let&#8217;s do something similar if they were to press the right arrow:</p>
+
+<script src="https://gist.github.com/2553762.js"> </script>
+
+
+<p>The code above is essentially the inverse of what we do for &larr;.</p>
+
+<p>Now that we&#8217;ve made the adjustment to our cubism code, we can open up <code>demo/index.html</code> in our browser and test it out! It should work great - we can jump 20 units left or right when we&#8217;re not close to an edge, and when we are close to an edge, it will fall back and just jump by 1 unit.</p>
+
+<h4>Adding this to the API</h4>
+
+<p>If you want to take this a step further, though, we can add this to the API of cubism, so you can dynamically change the shift difference value.</p>
+
+<p>The first thing we&#8217;ll need to do is set a default value as a variable. I&#8217;m calling mine <code>shiftDiff</code>, and putting it on line 25 of <code>cubism.v1.js</code>, directly underneat the <code>clientDelay</code> variable.</p>
+
+<script src="https://gist.github.com/2553771.js"> </script>
+
+
+<p>Now, we need to add a method to the <code>context</code> object. You can see directly under the <strong>update</strong> function declaration in <code>cubism.v1.js</code>, Mike starts to declare methods on the <code>context</code> object (like <em>start</em>, <em>stop</em>, <em>step</em>, etc&#8230;). We&#8217;re going to put ours directly underneath <code>stop</code>. So, on approximately line 68, let&#8217;s add the following:</p>
+
+<script src="https://gist.github.com/2553772.js"> </script>
+
+
+<p>This <code>shiftDiff</code> function allows us to pass in a <code>diff</code> argument, and will set the units to move when the user is holding <code>shift</code> and pressing the arrow keys. We can use it like so:</p>
+
+<script src="https://gist.github.com/2553774.js"> </script>
+
+
+<p>This won&#8217;t quite work yet, though - we need to update our previous adjustments to the switch statement on <code>keydown</code> to use the <code>shiftDiff</code> variable, not just <code>20</code>.</p>
+
+<p>So, they become:</p>
+
+<script src="https://gist.github.com/2553777.js"> </script>
+
+
+<p>Awesome. Now, let&#8217;s open up <code>demo/index.html</code> in our text editor and change the <code>shiftDiff</code> to a larger number. You&#8217;ll see on approximately line 14 of <code>demo/index.html</code>, there is a new cubism context created:</p>
+
+<script src="https://gist.github.com/2553781.js"> </script>
+
+
+<p>Let&#8217;s adjust that to take into account our new API adjustment:</p>
+
+<script src="https://gist.github.com/2553782.js"> </script>
+
+
+<p>Now, when we load up the <code>demo/index.html</code> page in our browser, the <code>shiftDiff</code> is going to be move a heck of a lot more than 20 units!</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[HTML5...plz?]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/01/23/html5-dot-dot-dot-plz/"/>
+    <updated>2012-01-23T18:09:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/01/23/html5-dot-dot-dot-plz</id>
+    <content type="html"><![CDATA[<p>I&#8217;m pleased to announce the launch of <a href="http://html5please.us">HTML5
+Please</a>! I was trying to think of a description
+for HTML5Please, but think <a href="http://nimbupani.com/">Divya</a>
+says it best in her <a href="http://nimbupani.com/html5please.html">blog post</a> about it:</p>
+
+<blockquote><p>&#8220;We hope this to be a global set of recommendations that web developers could consult and tap on when they are deciding on how to use features&#8221;</p></blockquote>
+
+<p><a href="https://github.com/h5bp/html5please/contributors">Lots of awesome people</a> helped make this, and let&#8217;s make an effort to keep it as up-to-date as possible!</p>
+
+<p>So, with that being said, can I <a href="http://html5please.us">plz use some
+HTML5&#8217;s</a>?</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[How to link to external posts in octopress]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/01/09/how-to-link-to-other-posts-in-octopress/"/>
+    <updated>2012-01-09T13:49:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/01/09/how-to-link-to-other-posts-in-octopress</id>
+    <content type="html"><![CDATA[<p>Earlier this week, <a href="http://www.candlerblog.com/" target="_blank">Jonathan Protsky</a> tweeted at me, <a href="https://twitter.com/#!/poritsky/status/156436178650931200" target="_blank">asking how I link to external posts</a> in my custom Octopress theme. I figured Jonathan isn&#8217;t the only one wondering how to do this, and since it isn&#8217;t exactly obvious, I&#8217;m here to share how I went about implementing that functionality.</p>
+
+<h3>It&#8217;s all in the YAML</h3>
+
+<p>As you can see <a href="https://github.com/imathis/octopress/issues/119#issuecomment-1922504" target="_blank">here</a>, Octopress allows any variable(s) to be added to the YAML of your post. The way I went about doing it was by adding an <code>external-url</code> attribute.</p>
+
+<h4>For example, see the post below</h4>
+
+<script src="https://gist.github.com/1584630.js"> </script>
+
+
+<p>As you can see, I&#8217;m simply adding an <code>external-url</code> attribute, and if I
+want to link to a post that is at a different URL, I just put the URL in
+there.</p>
+
+<p>Now, you may have noticed that I also gave the post some content. That&#8217;s
+becuase with my custom theme, I have links to the previous/next posts
+after the current post. If one of those links happens to be a post that
+uses an <code>external-url</code>, I&#8217;d like to give them some context on my own
+site before sending them off to another one.</p>
+
+<h3>Okay, it&#8217;s not all in the YAML</h3>
+
+<p>There&#8217;s actually one more step. We just have to adjust the index page that loops through and lists
+all of your posts (most likely <code>source/index.html</code>).</p>
+
+<p>All you need to do is check to see if <code>post.external-url</code> exists. See
+the example below (that&#8217;s actually the <code>index.html</code> file I use):</p>
+
+<script src="https://gist.github.com/1584645.js"> </script>
+
+
+<p>And, as you can see, I&#8217;m prefixing all of my posts that link to an
+external URL with <code>[link]</code>, so the user knows what to expect. I&#8217;d
+recommend giving some kind of visual cue to the user.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Play all rdio songs on mobile... kind of.]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/01/03/play-all-rdio-songs-on-mobile-dot-dot-dot-kind-of/"/>
+    <updated>2012-01-03T12:24:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/01/03/play-all-rdio-songs-on-mobile-dot-dot-dot-kind-of</id>
+    <content type="html"><![CDATA[<p>I&#8217;ve always wanted to just be able to shuffle through my entire
+collection on Rdio&#8217;s mobile app. While it&#8217;s on their <a href="http://help.rdio.com/customer/portal/questions/50582-when-will-i-be-able-to-play-my-collection-" target="_blank">timeline</a>, it&#8217;s not
+currently implemented.</p>
+
+<p>This is a (super) hacky way to accomplish what I wanted. Essentially, it
+creates two playlists:</p>
+
+<ol>
+<li>All songs in your collection</li>
+<li>All songs sync&#8217;d to mobile</li>
+</ol>
+
+
+<p>From there, you can shuffle through them, just like you&#8217;ve always wanted
+to.</p>
+
+<p>Check it out here: <a href="https://github.com/connormontgomery/sync-all-rdio-songs">https://github.com/connormontgomery/sync-all-rdio-songs</a>.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Sync all Rdio songs to mobile]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/01/02/want-to-sync-all-of-your-rdio-songs-to-mobile-now-you-can/"/>
+    <updated>2012-01-02T14:01:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/01/02/want-to-sync-all-of-your-rdio-songs-to-mobile-now-you-can</id>
+    <content type="html"><![CDATA[<p>Want a simple way to automatically sync all of the Rdio songs in your
+collection to mobile?</p>
+
+<p><a href="https://github.com/connormontgomery/sync-all-rdio-songs">Here you go</a> :D</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Keyboard shortcuts on Rdio]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/01/01/keyboard-shortcuts-on-rdios-web-app/"/>
+    <updated>2012-01-01T14:16:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/01/01/keyboard-shortcuts-on-rdios-web-app</id>
+    <content type="html"><![CDATA[<p class="update">
+<strong>Update:</strong> with the launch of <a href="http://blog.rdio.com/us/2012/03/introducing-new-rdio.html">Rdio 2.0</a>, some of the markup has changed. I have updated the <a href="https://gist.github.com/2067842">link to the gist</a> in the post.
+</p>
+
+
+<p>Call me crazy, but most of the time when I can use a web app over a
+native app, I prefer the web app. Maybe some of you do, too.</p>
+
+<p>Anyways, one of my favorite web apps is <a href="http://rdio.com">Rdio</a>. I
+recently found myself wishing I could control the web app with my <a href="http://www.apple.com/keyboard/">Apple
+Wireless Keyboard&#8217;s</a> media controls.
+Well, with a little hacking on a great
+<a href="https://github.com/borismus/keysocket/">project</a> put together by <a href="http://smus.com/">Boris
+Smus</a>, it&#8217;s now possible (Mac Only for now).</p>
+
+<h3>How to add keyboard shortcuts to Rdio&#8217;s web app</h3>
+
+<h4>Pre-requisites</h4>
+
+<ol>
+<li><p>First, you&#8217;ll want to clone <a href="https://github.com/borismus/keysocket/">his repo</a>.
+To do so, simply run the following command from the terminal:</p>
+
+<p>  <code>
+  git clone https://github.com/borismus/keysocket.git
+ </code></p></li>
+<li><p>Once you&#8217;ve cloned it, download and install the <a href="https://github.com/downloads/borismus/keysocket/KeySocket.zip">Key Socket.app</a>.
+This app will be installed on your Mac, and essentially messages the
+extension that a button has been pressed (I will explain this more later
+in the post).</p></li>
+<li><p>If you haven&#8217;t already, make sure you start the Key Socket.app. I
+would also recommend adjusting your system to start it up when the
+system boots.</p></li>
+</ol>
+
+
+<h4>Alright, let&#8217;s get started</h4>
+
+<ol>
+<li><p>Now it&#8217;s time to hack. Open up a terminal and <code>cd</code> into <code>/extension</code>
+within the project directory.</p></li>
+<li><p>Next, create a file for the rdio adapter. To do so, run:</p>
+
+<p> <code>
+ touch keysocket-rdio.js
+</code></p></li>
+<li><p>Now, open up the <code>keysocket-rdio.js</code> file you just created, and put the following code
+in there (I will explain it later on in the post):</p></li>
+</ol>
+
+
+<script src="https://gist.github.com/2067842.js"> </script>
+
+
+<p>Finally, open up the <code>manifest.json</code> file, and adjust it to be like
+so (I will also explain this later on in the post):</p>
+
+<script src="https://gist.github.com/1548717.js"> </script>
+
+
+<h4>Adding the extension to Chrome</h4>
+
+<p>Believe it or not, the extension is done! Now, we&#8217;ve just got to add it
+to Chrome. To do so, follow these steps:</p>
+
+<ol>
+<li><p>Navigate your browser to: <code>chrome://extensions</code>.</p></li>
+<li><p>Click the button that says <strong>&#8220;Load unpacked extension&#8230;&#8221;</strong>.</p></li>
+<li><p>Navigate to the <code>/extension</code> directory, and click <strong>&#8220;Select&#8221;</strong>.</p></li>
+<li><p>If you have Rdio&#8217;s web app open, give it a refresh, and your media keys should
+now be controlling the application! Make sure you don&#8217;t have iTunes
+and Rdio open (or the <a href="http://www.rdio.com/#/apps/mac/">Rdio Mac App</a> and the web app open), as it will affect both applications.</p></li>
+</ol>
+
+
+<h3>Further explanation</h3>
+
+<p>Awesome - you should now be able to control Rdio&#8217;s web app from your keyboard!
+I mentioned above that I&#8217;ll be explaining a few things later on in the
+post, so if you&#8217;d like to know more about how those things work, just
+keep on reading.</p>
+
+<h4>How the heck does this work?</h4>
+
+<p>It&#8217;s actually not that complicated at all. Boris does a great job of
+explaining it on his <a href="http://smus.com/chrome-media-keys-revisited">blog post</a> about creating the keysocket app and
+extension. I&#8217;d recommend checking that out (and following him on <a href="https://twitter.com/#!/borismus">Twitter</a>
+- he&#8217;s extremely bright and has lots of great stuff).</p>
+
+<p>Essentially, the keysocket app installed locally messages the extension
+when you press a button down. If that button&#8217;s character code matches
+what we define in our <code>keysocket-rdio.js</code> file (in this case, 20 for the
+previous button, 16 for play/pause, and 19 for the next button), then it
+executes the <code>simulateClick</code> function, passing in the <del>element ID</del> class that we defined.</p>
+
+<p>It then, well, simulates a click on that element.</p>
+
+<h4>Explaning keysocket-rdio.js</h4>
+
+<p>If you look at this file and compare it to the other
+<code>keysocket-x.js</code> files, you&#8217;ll see that it&#8217;s very similar. To be frank, I
+just copied &amp; pasted what Boris had done with other services, and modified it to work with
+Rdio. However - it&#8217;s good to know how I ended up changing it.</p>
+
+<p>It was extremely simple - the block of code from <code>line 34 - line 42</code> is
+all that needed modification. I just changed the <del>ID&#8217;s</del> classes of Rdio&#8217;s elements
+in the DOM to match what action was supposed to happen.</p>
+
+<figure>
+  <a href="http://f.cl.ly/items/3F092y1c2C1a0g3K2K0P/rdio_large.jpg" target="_blank"><img src="http://f.cl.ly/items/2r0a02151X2a042F190R/rdio_small.jpg"></a>
+  <figcaption><strong>Above:</strong> The DOM tree that makes up Rdio&#8217;s player</figcaption>
+</figure>
+
+
+<p>For example, on line 34. If the key pressed&#8217;s keyCode is equal to the
+<code>PREV</code>&#8217;s value (which happens if you press F7 on the Apple keyboard), it
+runs the <code>simulateClick</code> function and passes in the <del><code>previousButton</code> ID</del> <code>prev</code> class.</p>
+
+<p>That&#8217;s really it, just copied 3 times. If you have any questions about
+it, feel free to let me know on twitter.</p>
+
+<h4>Explaning manifest.json</h4>
+
+<p>Every chrome extension <strong>requires</strong> a <code>manifest.json</code> file. (<strong>note:</strong>
+if you&#8217;d like to learn more about Chrome Extension development, check
+out my <a href="http://net.tutsplus.com/tutorials/javascript-ajax/how-i-made-the-domai-nr-chrome-extension/">article on nettuts</a>.)</p>
+
+<p>All we are doing here is saying if the current URL <em>matches</em>
+<code>http://www.rdio.com/*</code>, load the <code>keysocket-rdio.js</code> file. That ending
+<code>*</code> is required, becuase it&#8217;s a wildcard character. Basically, that
+means the <code>keysocket-rdio.js</code> file will load at any path within
+<code>http://rdio.com</code>, not just the root path.</p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Move the Web Forward]]></title>
+    <link href="http://madhukarah.github.com/blog/2011/11/30/move-the-web-forward/"/>
+    <updated>2011-11-30T10:46:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2011/11/30/move-the-web-forward</id>
+    <content type="html"><![CDATA[<p>Some <a href="https://github.com/h5bp/movethewebforward/contributors">really awesome people</a> and I put together this awesome resource
+to help promote doing more for the web. It was an awesome experience,
+and would love it if you took a look.</p>
+
+<p><a href="http://movethewebforward.org">http://movethewebforward.org</a></p>
+]]></content>
+  </entry>
+  
+  <entry>
+    <title type="html"><![CDATA[Published on nettuts!]]></title>
+    <link href="http://madhukarah.github.com/blog/2011/08/09/published-on-nettuts/"/>
+    <updated>2011-08-09T10:31:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2011/08/09/published-on-nettuts</id>
+    <content type="html"><![CDATA[<p>Well this is exciting! I was just published in my first big blog! Check
+out my article on <a href="http://net.tutsplus.com/tutorials/javascript-ajax/how-i-made-the-domai-nr-chrome-extension/">how I made the Domai.nr Chrome Extension</a>
+on <a href="http://net.tutsplus.com">nettuts</a>!</p>
+
+<p>The extension can be found <a href="https://chrome.google.com/webstore/detail/ckimnhkhhfcedianojdljjgpgachccpf">here</a>. Go ahead and check it out!</p>
+]]></content>
+  </entry>
   
 </feed>

@@ -1,0 +1,232 @@
+
+<!DOCTYPE html>
+<!--[if IEMobile 7 ]><html class="no-js iem7"><![endif]-->
+<!--[if lt IE 9]><html class="no-js lte-ie8"><![endif]-->
+<!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <title>Keyboard shortcuts on Rdio - My Octopress Blog</title>
+
+  <meta name="description" content="Connor Montgomery is a Developer, CS Student, and Frat Boy.">
+  <meta name="author" content="Connor Montgomery">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+
+  <meta name="HandheldFriendly" content="True">
+  <meta name="MobileOptimized" content="320">
+
+  <script type="text/javascript" src="http://use.typekit.com/nuw6vzl.js"></script>
+  <script type="text/javascript">try{Typekit.load();}catch(e){}</script>
+
+  <!-- HTML5 shim -->
+  <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+
+  <link rel="stylesheet" href="/stylesheets/screen.css">
+
+</head>
+
+<body class="tk-proxima-nova">
+
+  <div class="container blog hidden">
+    <header id="header">
+      <h1 id="sm-logo">Hey there, I'm <a href="/">Connor</a>.
+        This is my <a href="/b">blog</a>.</h1>
+    </header>
+
+    <article id="main">
+      <header>
+
+  <h2 class="title">Keyboard shortcuts on Rdio</h2>
+  <h3 class="tk-museo-slab meta">Posted on 01 Jan 2012</h3>
+
+  <p class="update">
+<strong>Update:</strong> with the launch of <a href="http://blog.rdio.com/us/2012/03/introducing-new-rdio.html">Rdio 2.0</a>, some of the markup has changed. I have updated the <a href="https://gist.github.com/2067842">link to the gist</a> in the post.
+</p>
+
+
+<p>Call me crazy, but most of the time when I can use a web app over a
+native app, I prefer the web app. Maybe some of you do, too.</p>
+
+<p>Anyways, one of my favorite web apps is <a href="http://rdio.com">Rdio</a>. I
+recently found myself wishing I could control the web app with my <a href="http://www.apple.com/keyboard/">Apple
+Wireless Keyboard&#8217;s</a> media controls.
+Well, with a little hacking on a great
+<a href="https://github.com/borismus/keysocket/">project</a> put together by <a href="http://smus.com/">Boris
+Smus</a>, it&#8217;s now possible (Mac Only for now).</p>
+
+<h3>How to add keyboard shortcuts to Rdio&#8217;s web app</h3>
+
+<h4>Pre-requisites</h4>
+
+<ol>
+<li><p>First, you&#8217;ll want to clone <a href="https://github.com/borismus/keysocket/">his repo</a>.
+To do so, simply run the following command from the terminal:</p>
+
+<p>  <code>
+  git clone https://github.com/borismus/keysocket.git
+ </code></p></li>
+<li><p>Once you&#8217;ve cloned it, download and install the <a href="https://github.com/downloads/borismus/keysocket/KeySocket.zip">Key Socket.app</a>.
+This app will be installed on your Mac, and essentially messages the
+extension that a button has been pressed (I will explain this more later
+in the post).</p></li>
+<li><p>If you haven&#8217;t already, make sure you start the Key Socket.app. I
+would also recommend adjusting your system to start it up when the
+system boots.</p></li>
+</ol>
+
+
+<h4>Alright, let&#8217;s get started</h4>
+
+<ol>
+<li><p>Now it&#8217;s time to hack. Open up a terminal and <code>cd</code> into <code>/extension</code>
+within the project directory.</p></li>
+<li><p>Next, create a file for the rdio adapter. To do so, run:</p>
+
+<p> <code>
+ touch keysocket-rdio.js
+</code></p></li>
+<li><p>Now, open up the <code>keysocket-rdio.js</code> file you just created, and put the following code
+in there (I will explain it later on in the post):</p></li>
+</ol>
+
+
+<script src="https://gist.github.com/2067842.js"> </script>
+
+
+<p>Finally, open up the <code>manifest.json</code> file, and adjust it to be like
+so (I will also explain this later on in the post):</p>
+
+<script src="https://gist.github.com/1548717.js"> </script>
+
+
+<h4>Adding the extension to Chrome</h4>
+
+<p>Believe it or not, the extension is done! Now, we&#8217;ve just got to add it
+to Chrome. To do so, follow these steps:</p>
+
+<ol>
+<li><p>Navigate your browser to: <code>chrome://extensions</code>.</p></li>
+<li><p>Click the button that says <strong>&#8220;Load unpacked extension&#8230;&#8221;</strong>.</p></li>
+<li><p>Navigate to the <code>/extension</code> directory, and click <strong>&#8220;Select&#8221;</strong>.</p></li>
+<li><p>If you have Rdio&#8217;s web app open, give it a refresh, and your media keys should
+now be controlling the application! Make sure you don&#8217;t have iTunes
+and Rdio open (or the <a href="http://www.rdio.com/#/apps/mac/">Rdio Mac App</a> and the web app open), as it will affect both applications.</p></li>
+</ol>
+
+
+<h3>Further explanation</h3>
+
+<p>Awesome - you should now be able to control Rdio&#8217;s web app from your keyboard!
+I mentioned above that I&#8217;ll be explaining a few things later on in the
+post, so if you&#8217;d like to know more about how those things work, just
+keep on reading.</p>
+
+<h4>How the heck does this work?</h4>
+
+<p>It&#8217;s actually not that complicated at all. Boris does a great job of
+explaining it on his <a href="http://smus.com/chrome-media-keys-revisited">blog post</a> about creating the keysocket app and
+extension. I&#8217;d recommend checking that out (and following him on <a href="https://twitter.com/#!/borismus">Twitter</a>
+- he&#8217;s extremely bright and has lots of great stuff).</p>
+
+<p>Essentially, the keysocket app installed locally messages the extension
+when you press a button down. If that button&#8217;s character code matches
+what we define in our <code>keysocket-rdio.js</code> file (in this case, 20 for the
+previous button, 16 for play/pause, and 19 for the next button), then it
+executes the <code>simulateClick</code> function, passing in the <del>element ID</del> class that we defined.</p>
+
+<p>It then, well, simulates a click on that element.</p>
+
+<h4>Explaning keysocket-rdio.js</h4>
+
+<p>If you look at this file and compare it to the other
+<code>keysocket-x.js</code> files, you&#8217;ll see that it&#8217;s very similar. To be frank, I
+just copied &amp; pasted what Boris had done with other services, and modified it to work with
+Rdio. However - it&#8217;s good to know how I ended up changing it.</p>
+
+<p>It was extremely simple - the block of code from <code>line 34 - line 42</code> is
+all that needed modification. I just changed the <del>ID&#8217;s</del> classes of Rdio&#8217;s elements
+in the DOM to match what action was supposed to happen.</p>
+
+<figure>
+  <a href="http://f.cl.ly/items/3F092y1c2C1a0g3K2K0P/rdio_large.jpg" target="_blank"><img src="http://f.cl.ly/items/2r0a02151X2a042F190R/rdio_small.jpg"></a>
+  <figcaption><strong>Above:</strong> The DOM tree that makes up Rdio&#8217;s player</figcaption>
+</figure>
+
+
+<p>For example, on line 34. If the key pressed&#8217;s keyCode is equal to the
+<code>PREV</code>&#8217;s value (which happens if you press F7 on the Apple keyboard), it
+runs the <code>simulateClick</code> function and passes in the <del><code>previousButton</code> ID</del> <code>prev</code> class.</p>
+
+<p>That&#8217;s really it, just copied 3 times. If you have any questions about
+it, feel free to let me know on twitter.</p>
+
+<h4>Explaning manifest.json</h4>
+
+<p>Every chrome extension <strong>requires</strong> a <code>manifest.json</code> file. (<strong>note:</strong>
+if you&#8217;d like to learn more about Chrome Extension development, check
+out my <a href="http://net.tutsplus.com/tutorials/javascript-ajax/how-i-made-the-domai-nr-chrome-extension/">article on nettuts</a>.)</p>
+
+<p>All we are doing here is saying if the current URL <em>matches</em>
+<code>http://www.rdio.com/*</code>, load the <code>keysocket-rdio.js</code> file. That ending
+<code>*</code> is required, becuase it&#8217;s a wildcard character. Basically, that
+means the <code>keysocket-rdio.js</code> file will load at any path within
+<code>http://rdio.com</code>, not just the root path.</p>
+
+
+</header>
+
+
+
+<p class="bottom-nav-links">
+  
+    <span id="prev-link" class="bottom-nav-link">
+    <a class="basic-alignment left" href="/blog/2011/11/30/move-the-web-forward/" title="Previous Post: Move the Web Forward">&larr; Move the Web Forward</a>
+    </span>
+  
+  
+    <span id="next-link" class="bottom-nav-link">
+      <a class="basic-alignment right" href="/blog/2012/01/02/want-to-sync-all-of-your-rdio-songs-to-mobile-now-you-can/" title="next Post: Sync all Rdio songs to mobile">Sync all Rdio songs to mobile &rarr;</a>
+    </span>
+  
+</p>
+
+
+
+      <footer role="contentinfo"><footer class="post-footer">
+  Hey there, I'm Connor. You can find me on <a href="http://github.com/connor"
+      target="_blank">github</a>, <a href="http://twitter.com/connor"
+      target="_blank">twitter</a>, <a href="http://rdio.com/people/cnnr"
+      target="_blank">rdio</a>, <a
+      href="http://www.linkedin.com/profile/view?id=69032722&trk=tab_pro"
+      target="_blank">linkedin</a>, <a
+      href="http://facebook.com/connor.montgomery1"
+      target="_blank">facebook</a>, and <a href="mailto:c[at]cnnr[dot]me">gmail</a>. I helped prototype <a href="http://lift.do"
+      target="_blank">Lift</a> and I'm excited to be working for <a
+      href="http://apple.com" target="_blank">Apple</a> this summer in Cupertino. I'm a junior studying Computer Science at <a href="http://mathcs.slu.edu">SLU</a>.
+      This site is proudly powered by <a href="http://octopress.org" target="_blank">octopress</a>.
+    <!-- TODO: change the about me link to about.me -->
+</footer>
+</footer>
+    </article>
+  </div>
+
+  <script type="text/javascript">
+    var _gauges = _gauges || [];
+    (function() {
+      var t   = document.createElement('script');
+      t.type  = 'text/javascript';
+      t.async = true;
+      t.id    = 'gauges-tracker';
+      t.setAttribute('data-site-id', '4f1fb2fbcb25bc4025000001');
+      t.src = '//secure.gaug.es/track.js';
+      var s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(t, s);
+    })();
+  </script>
+</body>
+
+  <script defer src="/javascripts/ender.min.js"></script>
+  <script defer src="/javascripts/script.js"></script>
+
+</html>
