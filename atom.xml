@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <feed xmlns="http://www.w3.org/2005/Atom">
 
-  <title><![CDATA[My Octopress Blog]]></title>
+  <title><![CDATA[Madhukar Hiranya]]></title>
   <link href="http://madhukarah.github.com/atom.xml" rel="self"/>
   <link href="http://madhukarah.github.com/"/>
-  <updated>2012-05-28T21:04:53+05:30</updated>
+  <updated>2012-05-29T13:46:24+05:30</updated>
   <id>http://madhukarah.github.com/</id>
   <author>
-    <name><![CDATA[Your Name]]></name>
+    <name><![CDATA[Madhukar]]></name>
     
   </author>
   <generator uri="http://octopress.org/">Octopress</generator>
 
+  
+  <entry>
+    <title type="html"><![CDATA[Good bye Tumblr]]></title>
+    <link href="http://madhukarah.github.com/blog/2012/05/29/good-bye-tumblr/"/>
+    <updated>2012-05-29T00:09:00+05:30</updated>
+    <id>http://madhukarah.github.com/blog/2012/05/29/good-bye-tumblr</id>
+    <content type="html"><![CDATA[
+]]></content>
+  </entry>
   
 </feed>
