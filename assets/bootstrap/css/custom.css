@@ -436,7 +436,7 @@ hr.soften {
 /* Fields for variables */
 .download-builder input[type=text] {
   margin-bottom: 9px;
-  font-family: Menlo, Monaco, "Courier New", monospace;
+  font-family: Monaco,Menlo,"Courier New", monospace;
   font-size: 12px;
   color: #d14;
 }
