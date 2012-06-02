@@ -5,7 +5,7 @@
 <!--[if (gt IE 8)|(gt IEMobile 7)|!(IEMobile)|!(IE)]><!--><html class="no-js" lang="en"><!--<![endif]-->
 <head>
   <meta charset="utf-8">
-  <title>Render Any Images in the Terminal - Madhukar Hiranya</title>
+  <title>Run Sublime Text 2 from Terminal - Madhukar Hiranya</title>
 
   <meta name="description" content=".madhukarah .engineer .hacker .gamer">
   <meta name="author" content="Madhukarah">
@@ -39,18 +39,57 @@
     <article id="main">
       <header>
 
-  <h2 class="title">Render Any Images in the Terminal</h2>
-  <h3 class="tk-museo-slab meta">Posted on 29 May 2012</h3>
+  <h2 class="title">Run Sublime Text 2 from Terminal</h2>
+  <h3 class="tk-museo-slab meta">Posted on 31 May 2012</h3>
 
-  <p>Picture-tube is a fun project which renders the image using ANSI terminal codes. You can run this project from command line using,</p>
+  <p>If you work in bash or love terminal, you can open up a file and folders right from command line.</p>
 
-<figure class='code'><div class="highlight"><table><tr><td class="gutter"><pre class="line-numbers"><span class='line-number'>1</span>
-<span class='line-number'>2</span>
-</pre></td><td class='code'><pre><code class=''><span class='line'>$ npm install pictures-tube
-</span><span class='line'>$ picture-tube http://something.com/something.png</span></code></pre></td></tr></table></div></figure>
+<p>Let&#8217;s start by running the Terminal app by writing,</p>
 
+<pre><code>ln -s /Applications/Sublime\ Text\ 2.app/Contents/SharedSupport/bin/subl /usr/local/bin/sublime
+</code></pre>
 
-<p>Find the source on <a href="https://github.com/substack/picture-tube">GitHub</a>.</p>
+<p>The above code will crfeate a symbolic link called Sublime.</p>
+
+<p>Type,</p>
+
+<pre><code>open ~/.bash_profile
+</code></pre>
+
+<p>Simply add/modify the following line and save.</p>
+
+<pre><code>export PATH=/usr/local/bin:(...)
+</code></pre>
+
+<p>Reload using,</p>
+
+<pre><code>source ~/.bash_profile
+</code></pre>
+
+<p>You&#8217;re Done. Time for some test.</p>
+
+<pre><code>    sublime &lt;filename&gt;
+</code></pre>
+
+<h3>Arguments:</h3>
+
+<p>–project : Load the given project</p>
+
+<p>–command : Run the given command</p>
+
+<p>-n or –new-window: Open a new window</p>
+
+<p>-a or –add: Add folders to the current window</p>
+
+<p>-w or –wait: Wait for the files to be closed before returning</p>
+
+<p>-b or –background: Don’t activate the application</p>
+
+<p>-s or –stay: Keep the application activated after closing the file</p>
+
+<p>-h or –help: Show help (this message) and exit</p>
+
+<p>-v or –version: Show version and exit</p>
 
 
 </header>
@@ -59,9 +98,13 @@
 
 <p class="bottom-nav-links">
   
+    <span id="prev-link" class="bottom-nav-link">
+    <a class="basic-alignment left" href="/blog/2012/05/29/render-any-images-in-the-terminal/" title="Previous Post: Render Any Images in the Terminal">&larr; Render Any Images in the Terminal</a>
+    </span>
+  
   
     <span id="next-link" class="bottom-nav-link">
-      <a class="basic-alignment right" href="/blog/2012/05/31/run-sublime-text-2-from-terminal/" title="next Post: Run Sublime Text 2 from Terminal">Run Sublime Text 2 from Terminal &rarr;</a>
+      <a class="basic-alignment right" href="/blog/2012/05/31/unlock-ios-5-dot-1-1-using-saved-activation-tickets/" title="next Post: Unlock iOS 5.1.1 Using Saved Activation Tickets">Unlock iOS 5.1.1 Using Saved Activation Tickets &rarr;</a>
     </span>
   
 </p>
